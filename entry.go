@@ -7,28 +7,30 @@ import (
 )
 
 // Shortcut for the map of strings
-type Fields map[string]string
+type Fieldmap map[string]string
 
 // Parsed log record. Use Get method to retrieve a value by name instead of
 // threating this as a map, because inner representation is in design.
+
+// renaming "fields" to "Fields" and "Fields" to "Fieldmap" to export it
 type Entry struct {
-	fields Fields
+	Fields Fieldmap
 }
 
 // Creates an empty Entry to be filled later
 func NewEmptyEntry() *Entry {
-	return &Entry{make(Fields)}
+	return &Entry{make(Fieldmap)}
 }
 
-// Creates an Entry with fiven fields
-func NewEntry(fields Fields) *Entry {
-	return &Entry{fields}
+// Creates an Entry with fiven Fields
+func NewEntry(Fields Fieldmap) *Entry {
+	return &Entry{Fields}
 }
 
 // Return entry field value by name or empty string and error if it
 // does not exist.
 func (entry *Entry) Field(name string) (value string, err error) {
-	value, ok := entry.fields[name]
+	value, ok := entry.Fields[name]
 	if !ok {
 		err = fmt.Errorf("field '%v' does not found in record %+v", name, *entry)
 	}
@@ -47,32 +49,31 @@ func (entry *Entry) FloatField(name string) (value float64, err error) {
 
 // Field value setter
 func (entry *Entry) SetField(name string, value string) {
-	entry.fields[name] = value
+	entry.Fields[name] = value
 }
 
 // Float field value setter. It accepts float64, but still store it as a
-// string in the same fields map. The precision is 2, its enough for log
+// string in the same Fields map. The precision is 2, its enough for log
 // parsing task
 func (entry *Entry) SetFloatField(name string, value float64) {
 	entry.SetField(name, strconv.FormatFloat(value, 'f', 2, 64))
 }
 
 // Integer field value setter. It accepts float64, but still store it as a
-// string in the same fields map.
+// string in the same Fields map.
 func (entry *Entry) SetUintField(name string, value uint64) {
 	entry.SetField(name, strconv.FormatUint(uint64(value), 10))
 }
 
 // Merge two entries by updating values for master entry with given.
 func (master *Entry) Merge(entry *Entry) {
-	for name, value := range entry.fields {
+	for name, value := range entry.Fields {
 		master.SetField(name, value)
 	}
 }
-
-func (entry *Entry) FieldsHash(fields []string) string {
+func (entry *Entry) FieldsHash(Fields []string) string {
 	var key []string
-	for _, name := range fields {
+	for _, name := range Fields {
 		value, err := entry.Field(name)
 		if err != nil {
 			value = "NULL"
@@ -82,9 +83,9 @@ func (entry *Entry) FieldsHash(fields []string) string {
 	return strings.Join(key, ";")
 }
 
-func (entry *Entry) Partial(fields []string) *Entry {
+func (entry *Entry) Partial(Fields []string) *Entry {
 	partial := NewEmptyEntry()
-	for _, name := range fields {
+	for _, name := range Fields {
 		value, _ := entry.Field(name)
 		partial.SetField(name, value)
 	}

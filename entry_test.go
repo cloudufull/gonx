@@ -7,8 +7,8 @@ import (
 
 func TestEntry(t *testing.T) {
 	Convey("Test Entry", t, func() {
-		Convey("Test get Entry fields", func() {
-			entry := NewEntry(Fields{"foo": "1", "bar": "not a number"})
+		Convey("Test get Entry Fields", func() {
+			entry := NewEntry(Fieldmap{"foo": "1", "bar": "not a number"})
 
 			Convey("Get raw string value", func() {
 				// Get existings field
@@ -40,7 +40,7 @@ func TestEntry(t *testing.T) {
 			})
 		})
 
-		Convey("Test set Entry fields", func() {
+		Convey("Test set Entry Fields", func() {
 			entry := NewEmptyEntry()
 
 			Convey("Set raw string value", func() {
@@ -57,14 +57,14 @@ func TestEntry(t *testing.T) {
 				So(val, ShouldEqual, "234")
 			})
 
-			Convey("Test set float Entry fields", func() {
+			Convey("Test set float Entry Fields", func() {
 				entry.SetFloatField("foo", 123.4567)
 				val, err := entry.Field("foo")
 				So(err, ShouldBeNil)
 				So(val, ShouldEqual, "123.46")
 			})
 
-			Convey("Test set uint Entry fields", func() {
+			Convey("Test set uint Entry Fields", func() {
 				entry.SetUintField("foo", 123)
 				val, err := entry.Field("foo")
 				So(err, ShouldBeNil)
@@ -73,8 +73,8 @@ func TestEntry(t *testing.T) {
 		})
 
 		Convey("Test Entries merge", func() {
-			entry1 := NewEntry(Fields{"foo": "1", "bar": "hello"})
-			entry2 := NewEntry(Fields{"foo": "2", "bar": "hello", "name": "alpha"})
+			entry1 := NewEntry(Fieldmap{"foo": "1", "bar": "hello"})
+			entry2 := NewEntry(Fieldmap{"foo": "2", "bar": "hello", "name": "alpha"})
 			entry1.Merge(entry2)
 
 			val, err := entry1.Field("foo")
@@ -90,29 +90,29 @@ func TestEntry(t *testing.T) {
 			So(val, ShouldEqual, "alpha")
 		})
 
-		Convey("Test Entry fields hash", func() {
-			entry1 := NewEntry(Fields{"foo": "1", "bar": "Hello world #1", "name": "alpha"})
-			entry2 := NewEntry(Fields{"foo": "2", "bar": "Hello world #2", "name": "alpha"})
-			entry3 := NewEntry(Fields{"foo": "2", "bar": "Hello world #3", "name": "alpha"})
-			entry4 := NewEntry(Fields{"foo": "3", "bar": "Hello world #4", "name": "beta"})
+		Convey("Test Entry Fields hash", func() {
+			entry1 := NewEntry(Fieldmap{"foo": "1", "bar": "Hello world #1", "name": "alpha"})
+			entry2 := NewEntry(Fieldmap{"foo": "2", "bar": "Hello world #2", "name": "alpha"})
+			entry3 := NewEntry(Fieldmap{"foo": "2", "bar": "Hello world #3", "name": "alpha"})
+			entry4 := NewEntry(Fieldmap{"foo": "3", "bar": "Hello world #4", "name": "beta"})
 
-			fields := []string{"name"}
-			So(entry1.FieldsHash(fields), ShouldEqual, entry2.FieldsHash(fields))
-			So(entry1.FieldsHash(fields), ShouldEqual, entry3.FieldsHash(fields))
-			So(entry1.FieldsHash(fields), ShouldNotEqual, entry4.FieldsHash(fields))
+			Fields := []string{"name"}
+			So(entry1.FieldsHash(Fields), ShouldEqual, entry2.FieldsHash(Fields))
+			So(entry1.FieldsHash(Fields), ShouldEqual, entry3.FieldsHash(Fields))
+			So(entry1.FieldsHash(Fields), ShouldNotEqual, entry4.FieldsHash(Fields))
 
-			fields = []string{"name", "foo"}
-			So(entry1.FieldsHash(fields), ShouldNotEqual, entry2.FieldsHash(fields))
-			So(entry2.FieldsHash(fields), ShouldEqual, entry3.FieldsHash(fields))
-			So(entry1.FieldsHash(fields), ShouldNotEqual, entry4.FieldsHash(fields))
-			So(entry2.FieldsHash(fields), ShouldNotEqual, entry4.FieldsHash(fields))
+			Fields = []string{"name", "foo"}
+			So(entry1.FieldsHash(Fields), ShouldNotEqual, entry2.FieldsHash(Fields))
+			So(entry2.FieldsHash(Fields), ShouldEqual, entry3.FieldsHash(Fields))
+			So(entry1.FieldsHash(Fields), ShouldNotEqual, entry4.FieldsHash(Fields))
+			So(entry2.FieldsHash(Fields), ShouldNotEqual, entry4.FieldsHash(Fields))
 		})
 
 		Convey("Test partial Entry", func() {
-			entry := NewEntry(Fields{"foo": "1", "bar": "Hello world #1", "name": "alpha"})
+			entry := NewEntry(Fieldmap{"foo": "1", "bar": "Hello world #1", "name": "alpha"})
 			partial := entry.Partial([]string{"name", "foo"})
 
-			So(len(partial.fields), ShouldEqual, 2)
+			So(len(partial.Fields), ShouldEqual, 2)
 			val, _ := partial.Field("name")
 			So(val, ShouldEqual, "alpha")
 			val, _ = partial.Field("foo")
