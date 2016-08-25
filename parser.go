@@ -48,6 +48,9 @@ func (parser *Parser) ParseString(line string) (entry *Entry, err error) {
 	return
 }
 
+// the combined log format is predefined by nginx
+const combinedLogFormat = `$remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent"`
+
 // NewNginxParser parse nginx conf file to find log_format with given name and
 // returns parser for this format. It returns an error if cannot find the needle.
 func NewNginxParser(conf io.Reader, name string) (parser *Parser, err error) {
@@ -80,7 +83,12 @@ func NewNginxParser(conf io.Reader, name string) (parser *Parser, err error) {
 		}
 	}
 	if !found {
-		err = fmt.Errorf("`log_format %v` not found in given config", name)
+		if name == "combined" {
+			// "combined" is predefined, and is the default for access_logs that lack a format name
+			format = combinedLogFormat
+		} else {
+			err = fmt.Errorf("`log_format %v` not found in given config", name)
+		}
 	} else {
 		err = scanner.Err()
 	}
