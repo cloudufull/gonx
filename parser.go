@@ -22,8 +22,12 @@ type Parser struct {
 // Returns a new Parser, use given log format to create its internal
 // strings parsing regexp.
 func NewParser(format string) *Parser {
+	// escape any regex-looking like things so that wysiwyg
+	sanitizedFormat := regexp.QuoteMeta(format + " ")
+	// except dots, let's let people ignore sections of the log line by ...ing them out.
+	sanitizedFormat = strings.Replace(sanitizedFormat, "\\.", ".", -1)
 	re := regexp.MustCompile(`\\\$([a-z_]+)(\\?(.))`).ReplaceAllString(
-		regexp.QuoteMeta(format+" "), "(?P<$1>[^$3]*)$2")
+		sanitizedFormat, "(?P<$1>[^$3]*)$2")
 	return &Parser{format, regexp.MustCompile(fmt.Sprintf("^%v$", strings.Trim(re, " ")))}
 }
 
