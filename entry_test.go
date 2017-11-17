@@ -1,13 +1,14 @@
 package gonx
 
 import (
-	. "github.com/smartystreets/goconvey/convey"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestEntry(t *testing.T) {
 	Convey("Test Entry", t, func() {
-		Convey("Test get Entry Fields", func() {
+		Convey("Test get Entry Fieldmap", func() {
 			entry := NewEntry(Fieldmap{"foo": "1", "bar": "not a number"})
 
 			Convey("Get raw string value", func() {
@@ -40,7 +41,7 @@ func TestEntry(t *testing.T) {
 			})
 		})
 
-		Convey("Test set Entry Fields", func() {
+		Convey("Test set Entry Fieldmap", func() {
 			entry := NewEmptyEntry()
 
 			Convey("Set raw string value", func() {
@@ -57,14 +58,14 @@ func TestEntry(t *testing.T) {
 				So(val, ShouldEqual, "234")
 			})
 
-			Convey("Test set float Entry Fields", func() {
+			Convey("Test set float Entry Fieldmap", func() {
 				entry.SetFloatField("foo", 123.4567)
 				val, err := entry.Field("foo")
 				So(err, ShouldBeNil)
 				So(val, ShouldEqual, "123.46")
 			})
 
-			Convey("Test set uint Entry Fields", func() {
+			Convey("Test set uint Entry Fieldmap", func() {
 				entry.SetUintField("foo", 123)
 				val, err := entry.Field("foo")
 				So(err, ShouldBeNil)
@@ -90,7 +91,7 @@ func TestEntry(t *testing.T) {
 			So(val, ShouldEqual, "alpha")
 		})
 
-		Convey("Test Entry Fields hash", func() {
+		Convey("Test Entry Fieldmap hash", func() {
 			entry1 := NewEntry(Fieldmap{"foo": "1", "bar": "Hello world #1", "name": "alpha"})
 			entry2 := NewEntry(Fieldmap{"foo": "2", "bar": "Hello world #2", "name": "alpha"})
 			entry3 := NewEntry(Fieldmap{"foo": "2", "bar": "Hello world #3", "name": "alpha"})

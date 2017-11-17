@@ -23,7 +23,7 @@ func TestParser(t *testing.T) {
 
 			Convey("ParseString", func() {
 				line := `89.234.89.123 [08/Nov/2013:13:39:18 +0000] "GET /api/foo/bar HTTP/1.1" 200`
-				expected := NewEntry(Fields{
+				expected := NewEntry(Fieldmap{
 					"remote_addr": "89.234.89.123",
 					"time_local":  "08/Nov/2013:13:39:18 +0000",
 					"request":     "GET /api/foo/bar HTTP/1.1",
@@ -36,7 +36,7 @@ func TestParser(t *testing.T) {
 
 			Convey("Handle empty values", func() {
 				line := `89.234.89.123 [08/Nov/2013:13:39:18 +0000] "" 200`
-				expected := NewEntry(Fields{
+				expected := NewEntry(Fieldmap{
 					"remote_addr": "89.234.89.123",
 					"time_local":  "08/Nov/2013:13:39:18 +0000",
 					"request":     "",
