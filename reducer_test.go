@@ -28,21 +28,21 @@ func TestReducer(t *testing.T) {
 
 		Convey("With filled input channel", func() {
 			// Prepare import channel
-			input <- NewEntry(Fields{
+			input <- NewEntry(Fieldmap{
 				"uri":  "/asd/fgh",
 				"host": "alpha.example.com",
 				"foo":  "1",
 				"bar":  "2",
 				"baz":  "3",
 			})
-			input <- NewEntry(Fields{
+			input <- NewEntry(Fieldmap{
 				"uri":  "/zxc/vbn",
 				"host": "beta.example.com",
 				"foo":  "4",
 				"bar":  "5",
 				"baz":  "6",
 			})
-			input <- NewEntry(Fields{
+			input <- NewEntry(Fieldmap{
 				"uri":  "/ijk/lmn",
 				"host": "beta.example.com",
 				"foo":  "7",
@@ -129,7 +129,7 @@ func TestReducer(t *testing.T) {
 
 			Convey("Group reducer", func() {
 				reducer := NewGroupBy(
-					// Fields to group by
+					// Fieldmap to group by
 					[]string{"host"},
 					// Result reducers
 					&Sum{[]string{"foo", "bar"}},

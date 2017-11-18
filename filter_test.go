@@ -1,9 +1,10 @@
 package gonx
 
 import (
-	. "github.com/smartystreets/goconvey/convey"
 	"testing"
 	"time"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestFilter(t *testing.T) {
@@ -11,11 +12,11 @@ func TestFilter(t *testing.T) {
 		start := time.Date(2015, time.February, 2, 2, 2, 2, 0, time.UTC)
 		end := time.Date(2015, time.May, 5, 5, 5, 5, 0, time.UTC)
 
-		jan := NewEntry(Fields{"timestamp": "2015-01-01T01:01:01Z", "foo": "12"})
-		feb := NewEntry(Fields{"timestamp": "2015-02-02T02:02:02Z", "foo": "34"})
-		mar := NewEntry(Fields{"timestamp": "2015-03-03T03:03:03Z", "foo": "56"})
-		apr := NewEntry(Fields{"timestamp": "2015-04-04T04:04:04Z", "foo": "78"})
-		may := NewEntry(Fields{"timestamp": "2015-05-05T05:05:05Z", "foo": "90"})
+		jan := NewEntry(Fieldmap{"timestamp": "2015-01-01T01:01:01Z", "foo": "12"})
+		feb := NewEntry(Fieldmap{"timestamp": "2015-02-02T02:02:02Z", "foo": "34"})
+		mar := NewEntry(Fieldmap{"timestamp": "2015-03-03T03:03:03Z", "foo": "56"})
+		apr := NewEntry(Fieldmap{"timestamp": "2015-04-04T04:04:04Z", "foo": "78"})
+		may := NewEntry(Fieldmap{"timestamp": "2015-05-05T05:05:05Z", "foo": "90"})
 
 		Convey("Filter Entry", func() {
 			Convey("Start and end", func() {
