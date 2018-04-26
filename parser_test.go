@@ -1,9 +1,10 @@
 package gonx
 
 import (
-	. "github.com/smartystreets/goconvey/convey"
 	"strings"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestParser(t *testing.T) {
@@ -18,7 +19,7 @@ func TestParser(t *testing.T) {
 
 			Convey("Test format to regexp translation", func() {
 				So(parser.regexp.String(), ShouldEqual,
-					`^(?P<remote_addr>[^ ]*) \[(?P<time_local>[^]]*)\] "(?P<request>[^"]*)" (?P<status>[^ ]*)$`)
+					`^(?P<remote_addr>[^ ]*) \[(?P<time_local>[^]]*)\] "(?P<request>[^"]*)" (?P<status>[^ ]*).*$`)
 			})
 
 			Convey("ParseString", func() {
