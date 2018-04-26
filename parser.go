@@ -24,8 +24,12 @@ type Parser struct {
 func NewParser(format string) *Parser {
 	// escape any regex-looking like things so that wysiwyg
 	sanitizedFormat := regexp.QuoteMeta(format + " ")
-	// except dots, let's let people ignore sections of the log line by ...ing them out.
+	// except dots and stars, let's let people ignore sections of the log line
+	// by ...ing them out (or .*ing a section) This is necessary because the ALB
+	// format says "and there might be more fields at the end you should
+	// ignore."
 	sanitizedFormat = strings.Replace(sanitizedFormat, "\\.", ".", -1)
+	sanitizedFormat = strings.Replace(sanitizedFormat, "\\*", "*", -1)
 	re := regexp.MustCompile(`\\\$([A-Za-z0-9_]+)(\\?(.))`).ReplaceAllString(
 		sanitizedFormat, "(?P<$1>[^$3]*)$2")
 	return &Parser{format, regexp.MustCompile(fmt.Sprintf("^%v$", strings.Trim(re, " ")))}
